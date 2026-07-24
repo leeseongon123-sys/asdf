@@ -30,12 +30,12 @@ namespace SculptGame.Player
     {
         public static PlayerInventory Instance { get; private set; }
 
-        public const int SlotCount = 3;
+        public const int SlotCount = 1;
 
         public float pickupRange = 3.0f;
         public LayerMask resourceLayerMask;
 
-        // 고정 3슬롯 배열
+        // 고정 1슬롯 배열
         private HotbarSlot[] slots = new HotbarSlot[SlotCount];
         private int selectedSlotIndex = 0;
 
@@ -73,7 +73,7 @@ namespace SculptGame.Player
                 PickupResource(currentHoveredResource);
             }
 
-            // 숫자키 1/2/3 으로 슬롯 선택
+            // 숫자키 1 으로 슬롯 선택
             HandleSlotSelectionInput();
         }
 
@@ -82,12 +82,8 @@ namespace SculptGame.Player
 #if ENABLE_INPUT_SYSTEM
             if (Keyboard.current == null) return;
             if (Keyboard.current.digit1Key.wasPressedThisFrame) SelectSlot(0);
-            else if (Keyboard.current.digit2Key.wasPressedThisFrame) SelectSlot(1);
-            else if (Keyboard.current.digit3Key.wasPressedThisFrame) SelectSlot(2);
 #else
             if (Input.GetKeyDown(KeyCode.Alpha1)) SelectSlot(0);
-            else if (Input.GetKeyDown(KeyCode.Alpha2)) SelectSlot(1);
-            else if (Input.GetKeyDown(KeyCode.Alpha3)) SelectSlot(2);
 #endif
         }
 
@@ -122,7 +118,7 @@ namespace SculptGame.Player
             }
 
             // 슬롯이 꽉 참
-            Debug.LogWarning("[Inventory] 핫바가 가득 찼습니다! (최대 3칸)");
+            Debug.LogWarning("[Inventory] 핫바가 가득 찼습니다! (최대 1칸)");
             return false;
         }
 

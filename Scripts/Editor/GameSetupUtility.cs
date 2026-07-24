@@ -202,7 +202,7 @@ namespace SculptGame.EditorTools
             // Save and Mark Scene Dirty
             UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
             Debug.Log("✅ [Sculpt Game] Auto Setup Complete! UI Canvas, EventSystem, Managers, Ground Canvas Floor, and 3D Player Controller fully connected.");
-            EditorUtility.DisplayDialog("Setup Complete", "100% 자동 세팅 완료!\n\nUI 캔버스, 매니저, 3D 플레이어, 캔버스 바닥이 완벽하게 자동 연결되었습니다.\n수동 설정 없이 바로 Play(▶) 버튼을 눌러 테스트하실 수 있습니다!", "확인");
+            EditorUtility.DisplayDialog("Setup Complete", "100% 자동 세팅 완료!\n\nUI 캔버스, 매니저, 3D 플레이어, 캔버스 바닥이 완벽하게 자동 연결되었습니다.\n인벤토리 슬롯: 1칸", "확인");
         }
 
         private static void SetupUICanvas(GameObject managersObj)
@@ -341,10 +341,10 @@ namespace SculptGame.EditorTools
             hudComp.submitEarlyButton = submitBtn;
 
             // ═══════════════════════════════════════════════
-            // HOTBAR — 하단 중앙 3슬롯 핫바
+            // HOTBAR — 하단 중앙 1슬롯 핫바
             // ═══════════════════════════════════════════════
             GameObject hotbarRoot = FindOrCreateChild(hudPanel, "HotbarRoot");
-            SetRectAnchorBottom(hotbarRoot, new Vector2(0.5f, 0f), new Vector2(480f, 110f), new Vector2(0f, 20f));
+            SetRectAnchorBottom(hotbarRoot, new Vector2(0.5f, 0f), new Vector2(170f, 110f), new Vector2(0f, 20f));
 
             // 반투명 배경 패널
             Image hotbarBg = GetOrAdd<Image>(hotbarRoot);
@@ -362,8 +362,6 @@ namespace SculptGame.EditorTools
             Color[] slotAccent = new Color[]
             {
                 new Color(0.35f, 0.75f, 0.95f),  // 슬롯 1 — 하늘
-                new Color(0.95f, 0.60f, 0.20f),  // 슬롯 2 — 오렌지
-                new Color(0.45f, 0.85f, 0.45f),  // 슬롯 3 — 그린
             };
 
             float slotW = 136f;
@@ -469,7 +467,7 @@ namespace SculptGame.EditorTools
             GameObject controlHintObj = FindOrCreateChild(palettePanel, "ControlHintText");
             SetRectFull(controlHintObj);
             TextMeshProUGUI controlHintTxt = GetOrAdd<TextMeshProUGUI>(controlHintObj);
-            controlHintTxt.text      = "맵을 탐색해 재료를 주워오세요  |  1·2·3: 슬롯 전환  |  우클릭·R: 분해수거";
+            controlHintTxt.text      = "맵을 탐색해 재료를 주워오세요  |  1: 슬롯 선택  |  우클릭·R: 분해수거";
             controlHintTxt.fontSize  = 14f;
             controlHintTxt.alignment = TextAlignmentOptions.Center;
             controlHintTxt.color     = new Color(0.7f, 0.7f, 0.7f, 0.8f);

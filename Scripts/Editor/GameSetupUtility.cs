@@ -289,37 +289,42 @@ namespace SculptGame.EditorTools
             GameObject hudPanel = FindOrCreateChild(canvasObj, "BuildingHUDPanel");
             SetRectFull(hudPanel);
 
-            // Top Bar
+            // ═══════════════════════════════════════════════
+            // TOP BAR — 타이머 + 주제어 (중앙 상단)
+            // ═══════════════════════════════════════════════
             GameObject topBarObj = FindOrCreateChild(hudPanel, "TopBar");
-            SetRectAnchor(topBarObj, new Vector2(0.5f, 0.93f), new Vector2(1000, 80));
+            SetRectAnchor(topBarObj, new Vector2(0.5f, 0.93f), new Vector2(400, 120));
             Image topBarBg = GetOrAdd<Image>(topBarObj);
-            topBarBg.color = new Color(0f, 0f, 0f, 0.65f);
+            topBarBg.color = new Color(0f, 0f, 0f, 0f);  // 투명 배경
 
-            GameObject hudTopicObj = FindOrCreateChild(topBarObj, "TopicText");
-            TextMeshProUGUI hudTopicTxt = GetOrAdd<TextMeshProUGUI>(hudTopicObj);
-            hudTopicTxt.text = "주제: 자동차";
-            hudTopicTxt.fontSize = 28;
-            hudTopicTxt.alignment = TextAlignmentOptions.Left;
-            ApplyGalmuriFont(hudTopicTxt);
-            SetRectAnchor(hudTopicObj, new Vector2(0.2f, 0.5f), new Vector2(300, 60));
-
+            // 타이머 (크고 중앙)
             GameObject hudTimerObj = FindOrCreateChild(topBarObj, "TimerText");
+            RectTransform timerRt = GetOrAdd<RectTransform>(hudTimerObj);
+            timerRt.anchorMin = new Vector2(0.5f, 0.5f);
+            timerRt.anchorMax = new Vector2(0.5f, 0.5f);
+            timerRt.sizeDelta = new Vector2(300, 60);
+            timerRt.anchoredPosition = new Vector2(0f, 30f);
             TextMeshProUGUI hudTimerTxt = GetOrAdd<TextMeshProUGUI>(hudTimerObj);
             hudTimerTxt.text = "02:00";
-            hudTimerTxt.fontSize = 42;
+            hudTimerTxt.fontSize = 52;
+            hudTimerTxt.fontStyle = FontStyles.Bold;
             hudTimerTxt.alignment = TextAlignmentOptions.Center;
             ApplyGalmuriFont(hudTimerTxt);
-            SetRectAnchor(hudTimerObj, new Vector2(0.5f, 0.5f), new Vector2(200, 60));
 
-            GameObject hudScoreObj = FindOrCreateChild(topBarObj, "TargetScoreText");
-            TextMeshProUGUI hudScoreTxt = GetOrAdd<TextMeshProUGUI>(hudScoreObj);
-            hudScoreTxt.text = "목표: 70점 이상";
-            hudScoreTxt.fontSize = 24;
-            hudScoreTxt.alignment = TextAlignmentOptions.Right;
-            ApplyGalmuriFont(hudScoreTxt);
-            SetRectAnchor(hudScoreObj, new Vector2(0.8f, 0.5f), new Vector2(300, 60));
+            // 주제어 (타이머 아래)
+            GameObject hudTopicObj = FindOrCreateChild(topBarObj, "TopicText");
+            RectTransform topicRt = GetOrAdd<RectTransform>(hudTopicObj);
+            topicRt.anchorMin = new Vector2(0.5f, 0.5f);
+            topicRt.anchorMax = new Vector2(0.5f, 0.5f);
+            topicRt.sizeDelta = new Vector2(300, 40);
+            topicRt.anchoredPosition = new Vector2(0f, -20f);
+            TextMeshProUGUI hudTopicTxt = GetOrAdd<TextMeshProUGUI>(hudTopicObj);
+            hudTopicTxt.text = "자동차";
+            hudTopicTxt.fontSize = 28;
+            hudTopicTxt.alignment = TextAlignmentOptions.Center;
+            ApplyGalmuriFont(hudTopicTxt);
 
-            // Early Submit Button
+            // Early Submit Button (우측 상단)
             GameObject submitBtnObj = FindOrCreateChild(hudPanel, "SubmitButton");
             SetRectAnchor(submitBtnObj, new Vector2(0.9f, 0.93f), new Vector2(160, 60));
             Image submitBtnImg = GetOrAdd<Image>(submitBtnObj);
@@ -337,11 +342,11 @@ namespace SculptGame.EditorTools
             HUDUI hudComp = GetOrAdd<HUDUI>(hudPanel);
             hudComp.topicText = hudTopicTxt;
             hudComp.timerText = hudTimerTxt;
-            hudComp.targetScoreText = hudScoreTxt;
+            hudComp.targetScoreText = null;  // 제거
             hudComp.submitEarlyButton = submitBtn;
 
             // ═══════════════════════════════════════════════
-            // HOTBAR — 하단 중앙 1슬롯 핫바
+            // HOTBAR — 하단 중앙 1슬롯 핫바 (약간 작게)
             // ═══════════════════════════════════════════════
             GameObject hotbarRoot = FindOrCreateChild(hudPanel, "HotbarRoot");
             
@@ -355,7 +360,7 @@ namespace SculptGame.EditorTools
                 }
             }
             
-            SetRectAnchorBottom(hotbarRoot, new Vector2(0.5f, 0f), new Vector2(170f, 110f), new Vector2(0f, 20f));
+            SetRectAnchorBottom(hotbarRoot, new Vector2(0.5f, 0f), new Vector2(160f, 100f), new Vector2(0f, 20f));
 
             // 반투명 배경 패널
             Image hotbarBg = GetOrAdd<Image>(hotbarRoot);
@@ -371,7 +376,6 @@ namespace SculptGame.EditorTools
 
             float slotW = 136f;
             float slotH = 86f;
-            // 1칸만 생성하므로 spacing과 offset 계산 불필요 - 중앙에 배치
             float centerX = 0f;
 
             for (int si = 0; si < PlayerInventory.SlotCount; si++)
@@ -382,14 +386,14 @@ namespace SculptGame.EditorTools
                 slotRt.anchorMin = new Vector2(0.5f, 0.5f);
                 slotRt.anchorMax = new Vector2(0.5f, 0.5f);
                 slotRt.sizeDelta = new Vector2(slotW, slotH);
-                slotRt.anchoredPosition = new Vector2(centerX, 0f);  // 중앙 배치
+                slotRt.anchoredPosition = new Vector2(centerX, 0f);
 
-                // 외곽선 (슬롯 전체 크기)
+                // 외곽선
                 Image outlineImg = GetOrAdd<Image>(slotObj);
                 outlineImg.color = new Color(1f, 1f, 1f, 0.15f);
                 hotbarUI.slotOutlines[si] = outlineImg;
 
-                // 배경 (outline 보다 약간 안쪽)
+                // 배경
                 GameObject bgObj = FindOrCreateChild(slotObj, "BG");
                 RectTransform bgRt = GetOrAdd<RectTransform>(bgObj);
                 bgRt.anchorMin = Vector2.zero;
@@ -400,7 +404,7 @@ namespace SculptGame.EditorTools
                 bgImg.color = new Color(0.05f, 0.06f, 0.12f, 0.88f);
                 hotbarUI.slotBgImages[si] = bgImg;
 
-                // 아이콘 (좌측 정사각형)
+                // 아이콘
                 GameObject iconObj = FindOrCreateChild(slotObj, "Icon");
                 RectTransform iconRt = GetOrAdd<RectTransform>(iconObj);
                 iconRt.anchorMin = new Vector2(0f, 0.5f);
@@ -459,26 +463,6 @@ namespace SculptGame.EditorTools
             hintTxt.color     = new Color(0.9f, 1f, 0.5f);
             ApplyGalmuriFont(hintTxt);
             hotbarUI.pickupHintText = hintTxt;
-
-            // ═══════════════════════════════════════════════
-            // CONTROL HINT PANEL — 핫바 아래 조작 안내
-            // ═══════════════════════════════════════════════
-            GameObject palettePanel = FindOrCreateChild(hudPanel, "ObjectPalettePanel");
-            SetRectAnchorBottom(palettePanel, new Vector2(0.5f, 0f), new Vector2(700f, 32f), new Vector2(0f, -12f));
-            Image paletteBg = GetOrAdd<Image>(palettePanel);
-            paletteBg.color = new Color(0f, 0f, 0f, 0.0f); // 투명 배경
-
-            GameObject controlHintObj = FindOrCreateChild(palettePanel, "ControlHintText");
-            SetRectFull(controlHintObj);
-            TextMeshProUGUI controlHintTxt = GetOrAdd<TextMeshProUGUI>(controlHintObj);
-            controlHintTxt.text      = "맵을 탐색해 재료를 주워오세요  |  1: 슬롯 선택  |  우클릭·R: 분해수거";
-            controlHintTxt.fontSize  = 14f;
-            controlHintTxt.alignment = TextAlignmentOptions.Center;
-            controlHintTxt.color     = new Color(0.7f, 0.7f, 0.7f, 0.8f);
-            ApplyGalmuriFont(controlHintTxt);
-
-            ObjectPaletteUI paletteComp = GetOrAdd<ObjectPaletteUI>(palettePanel);
-            paletteComp.controlHintText = controlHintTxt;
 
             // --- Scoring Loading Panel ---
             GameObject scoringPanel = FindOrCreateChild(canvasObj, "ScoringLoadingPanel");
@@ -582,7 +566,6 @@ namespace SculptGame.EditorTools
         private static TMP_FontAsset GetGalmuriFont()
         {
             if (_galmuriFont != null) return _galmuriFont;
-            // Try loading from Assets root (where user placed Galmuri11 SDF.asset)
             _galmuriFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Galmuri11 SDF.asset");
             if (_galmuriFont == null)
                 Debug.LogWarning("[Sculpt Game] Galmuri11 SDF.asset not found at Assets/Galmuri11 SDF.asset — text will use TMP default font.");
@@ -633,13 +616,13 @@ namespace SculptGame.EditorTools
         private static void SetRectAnchorBottom(GameObject go,Vector2 anchor,Vector2 size,Vector2 offset)
         {
             RectTransform rt = GetOrAdd<RectTransform>(go);
-
             rt.anchorMin = anchor;
             rt.anchorMax = anchor;
             rt.pivot = new Vector2(0.5f, 0f);
             rt.sizeDelta = size;
             rt.anchoredPosition = offset;
         }
+
         private static BuildableObjectData CreateObjectData(string id, string name, PrimitiveType shape, Color color)
         {
             BuildableObjectData data = ScriptableObject.CreateInstance<BuildableObjectData>();

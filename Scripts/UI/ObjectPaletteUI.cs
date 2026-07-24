@@ -50,7 +50,7 @@ namespace SculptGame.UI
             }
             else
             {
-                controlHintText.text = "맵을 탐색해 재료를 주워오세요  |  1·2·3: 슬롯 전환  |  우클릭·R: 분해수거";
+                controlHintText.text = "맵을 탐색해 재료를 주워오세요  |  1: 슬롯 선택  |  우클릭·R: 분해수거";
             }
         }
 

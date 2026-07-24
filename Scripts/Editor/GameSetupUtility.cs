@@ -344,6 +344,17 @@ namespace SculptGame.EditorTools
             // HOTBAR — 하단 중앙 1슬롯 핫바
             // ═══════════════════════════════════════════════
             GameObject hotbarRoot = FindOrCreateChild(hudPanel, "HotbarRoot");
+            
+            // 기존 슬롯 정리
+            for (int i = hotbarRoot.transform.childCount - 1; i >= 0; i--)
+            {
+                Transform child = hotbarRoot.transform.GetChild(i);
+                if (child.name.StartsWith("Slot_"))
+                {
+                    DestroyImmediate(child.gameObject);
+                }
+            }
+            
             SetRectAnchorBottom(hotbarRoot, new Vector2(0.5f, 0f), new Vector2(170f, 110f), new Vector2(0f, 20f));
 
             // 반투명 배경 패널
@@ -358,17 +369,10 @@ namespace SculptGame.EditorTools
             hotbarUI.slotCountTexts = new TextMeshProUGUI[PlayerInventory.SlotCount];
             hotbarUI.slotOutlines   = new Image[PlayerInventory.SlotCount];
 
-            // 슬롯 색상 (각 슬롯 아이콘 기본 색)
-            Color[] slotAccent = new Color[]
-            {
-                new Color(0.35f, 0.75f, 0.95f),  // 슬롯 1 — 하늘
-            };
-
             float slotW = 136f;
             float slotH = 86f;
-            float slotSpacing = 10f;
-            float totalW  = slotW * PlayerInventory.SlotCount + slotSpacing * (PlayerInventory.SlotCount - 1);
-            float startX  = -totalW * 0.5f + slotW * 0.5f;
+            // 1칸만 생성하므로 spacing과 offset 계산 불필요 - 중앙에 배치
+            float centerX = 0f;
 
             for (int si = 0; si < PlayerInventory.SlotCount; si++)
             {
@@ -378,7 +382,7 @@ namespace SculptGame.EditorTools
                 slotRt.anchorMin = new Vector2(0.5f, 0.5f);
                 slotRt.anchorMax = new Vector2(0.5f, 0.5f);
                 slotRt.sizeDelta = new Vector2(slotW, slotH);
-                slotRt.anchoredPosition = new Vector2(startX + si * (slotW + slotSpacing), 0f);
+                slotRt.anchoredPosition = new Vector2(centerX, 0f);  // 중앙 배치
 
                 // 외곽선 (슬롯 전체 크기)
                 Image outlineImg = GetOrAdd<Image>(slotObj);

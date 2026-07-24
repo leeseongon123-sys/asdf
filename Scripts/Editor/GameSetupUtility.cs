@@ -295,7 +295,7 @@ namespace SculptGame.EditorTools
             GameObject topBarObj = FindOrCreateChild(hudPanel, "TopBar");
             SetRectAnchor(topBarObj, new Vector2(0.5f, 0.93f), new Vector2(400, 120));
             Image topBarBg = GetOrAdd<Image>(topBarObj);
-            topBarBg.color = new Color(0f, 0f, 0f, 0f);  // 투명 배경
+            topBarBg.color = new Color(0.1f, 0.1f, 0.15f, 0.7f);  // 회색 반투명 패널
 
             // 타이머 (크고 중앙)
             GameObject hudTimerObj = FindOrCreateChild(topBarObj, "TimerText");
